@@ -1,6 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { HashRouter as Route, Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Auth from "../Routes/Auth";
 import Feed from "../Routes/Feed";
 import Explore from "../Routes/Explore";
@@ -15,7 +15,6 @@ const LoggerInRoutes = () => (
 		<Route path="/:username" component={Profile} />
 	</Switch>
 );
-
 const LoggedOutRoutes = () => (
 	<Switch>
 		<Route exact path="/" component={Auth} />
