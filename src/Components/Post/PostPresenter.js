@@ -121,6 +121,7 @@ export default ({
 	comments,
 	selfComments,
 	loading,
+	gapCreatedAt,
 }) => (
 	<Post>
 		<Header>
@@ -165,7 +166,7 @@ export default ({
 					))}
 				</Comments>
 			)}
-			<Timestamp>{createdAt}</Timestamp>
+			<Timestamp>{gapCreatedAt(createdAt)}</Timestamp>
 			{loading && <Loader />}
 			{!loading && (
 				<Textarea
