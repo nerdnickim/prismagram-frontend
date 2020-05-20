@@ -3,7 +3,8 @@ import styled from "styled-components";
 import TextareaAutosize from "react-autosize-textarea";
 import FatText from "../FatText";
 import Avatar from "../Avatart";
-import { HeartFull, HeartEmpty, Comment } from "../Icons";
+import { HeartFull, HeartEmpty, Comment as CommentIcon } from "../Icons";
+import Loader from "../Loader";
 
 const Post = styled.div`
 	${(props) => props.theme.whiteBox};
@@ -57,6 +58,12 @@ const Button = styled.span`
 
 const Meta = styled.div`
 	padding: 15px;
+	.loader {
+		text-align: center;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
 `;
 
 const Buttons = styled.div`
@@ -89,6 +96,17 @@ const Textarea = styled(TextareaAutosize)`
 	}
 `;
 
+const Comments = styled.ul`
+	margin-top: 10px;
+`;
+
+const Comment = styled.li`
+	margin-bottom: 7px;
+	span {
+		margin-right: 5px;
+	}
+`;
+
 export default ({
 	user: { username, avatar },
 	location,
@@ -99,6 +117,10 @@ export default ({
 	newComment,
 	currentItem,
 	toggleLike,
+	onKeyPress,
+	comments,
+	selfComments,
+	loading,
 }) => (
 	<Post>
 		<Header>
@@ -123,12 +145,36 @@ export default ({
 			<Buttons>
 				<Button onClick={toggleLike}>{isLiked ? <HeartFull /> : <HeartEmpty />}</Button>
 				<Button>
-					<Comment />
+					<CommentIcon />
 				</Button>
 			</Buttons>
 			<FatText text={likeCount === 1 ? "1 like" : `${likeCount} likes`} />
+			{comments && (
+				<Comments key={comments.id}>
+					{comments.map((comment) => (
+						<Comment key={comment.id}>
+							<FatText text={comment.user.username} />
+							{comment.text}
+						</Comment>
+					))}
+					{selfComments.map((comment) => (
+						<Comment key={comment.id}>
+							<FatText text={comment.user.username} />
+							{comment.text}
+						</Comment>
+					))}
+				</Comments>
+			)}
 			<Timestamp>{createdAt}</Timestamp>
-			<Textarea placeholder="add a comment" {...newComment} />
+			{loading && <Loader />}
+			{!loading && (
+				<Textarea
+					placeholder="add a comment"
+					onKeyPress={onKeyPress}
+					value={newComment.value}
+					onChange={newComment.onChange}
+				/>
+			)}
 		</Meta>
 	</Post>
 );

@@ -20,7 +20,7 @@ const Loader = styled.div`
 `;
 
 export default () => (
-	<Loader>
+	<Loader className="loader">
 		<Logo size={36} />
 	</Loader>
 );

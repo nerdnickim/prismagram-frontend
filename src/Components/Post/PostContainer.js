@@ -20,9 +20,10 @@ const PostContainer = ({
 	const [isLikedS, setIsLiked] = useState(isLiked);
 	const [likeCountS, setLikeCount] = useState(likeCount);
 	const [currentItem, setCurrentItem] = useState(0);
+	const [selfComments, setSelfComments] = useState([]);
 	const comment = useInput("");
 	const [toggleLikeMutation] = useMutation(TOGGLE_LIKE, { variables: { postId: id } });
-	const [addCommentMutation] = useMutation(ADD_COMMENT, {
+	const [addCommentMutation, { loading }] = useMutation(ADD_COMMENT, {
 		variables: { postId: id, text: comment.value },
 	});
 	const slide = () => {
@@ -49,6 +50,22 @@ const PostContainer = ({
 		}
 	};
 
+	const onKeyPress = async (e) => {
+		const { which } = e;
+		if (which === 13) {
+			e.preventDefault();
+			comment.setValue("");
+			try {
+				const {
+					data: { addComment },
+				} = await addCommentMutation();
+				setSelfComments([...selfComments, addComment]);
+			} catch {
+				toast.error("Can't send Comment");
+			}
+		}
+	};
+
 	return (
 		<PostPresenter
 			user={user}
@@ -64,6 +81,9 @@ const PostContainer = ({
 			location={location}
 			currentItem={currentItem}
 			toggleLike={toggleLike}
+			onKeyPress={onKeyPress}
+			selfComments={selfComments}
+			loading={loading}
 		/>
 	);
 };
