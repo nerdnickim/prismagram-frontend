@@ -54,12 +54,12 @@ const PostContainer = ({
 		const { which } = e;
 		if (which === 13) {
 			e.preventDefault();
-			comment.setValue("");
 			try {
 				const {
 					data: { addComment },
 				} = await addCommentMutation();
 				setSelfComments([...selfComments, addComment]);
+				comment.setValue("");
 			} catch {
 				toast.error("Can't send Comment");
 			}
