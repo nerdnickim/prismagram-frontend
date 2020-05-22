@@ -21,7 +21,7 @@ const Container = styled.div`
     ${(props) => getSize(props.size)}
     background-image: url(${(props) => props.url});
     background-size: cover;
-    background-radius: 50%;
+    border-radius: 50%;
 
 `;
 

@@ -5,12 +5,16 @@ import FatText from "../FatText";
 import Avatar from "../Avatart";
 import { HeartFull, HeartEmpty, Comment as CommentIcon } from "../Icons";
 import Loader from "../Loader";
+import { Link } from "react-router-dom";
 
 const Post = styled.div`
 	${(props) => props.theme.whiteBox};
 	user-select: none;
 	width: 100%;
 	max-width: 600px;
+	a {
+		color: inherit;
+	}
 	margin-bottom: 25px;
 `;
 
@@ -127,7 +131,9 @@ export default ({
 		<Header>
 			<Avatar size="sm" url={avatar} />
 			<UserColumn>
-				<FatText text={username} />
+				<Link to={`/${username}`}>
+					<FatText text={username} />
+				</Link>
 				<Location>{location}</Location>
 			</UserColumn>
 		</Header>

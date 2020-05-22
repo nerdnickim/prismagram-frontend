@@ -28,7 +28,6 @@ const HeaderWrapper = styled.div`
 	max-width: ${(props) => props.theme.maxWidth};
 	display: flex;
 	justify-content: center;
-	align-items: center;
 `;
 
 const HeaderColumn = styled.div`
