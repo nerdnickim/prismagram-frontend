@@ -43,7 +43,7 @@ export default withRouter(
 		},
 	}) => {
 		const { data, loading } = useQuery(GET_USER, { variables: { username } });
-		const logOut = useMutation(LOG_OUT);
+		const [logOut] = useMutation(LOG_OUT);
 		return <ProfilePresenter data={data} logOut={logOut} loading={loading} />;
 	}
 );

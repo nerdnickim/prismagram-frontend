@@ -7,6 +7,7 @@ import FatText from "../../Components/FatText";
 import FollowButton from "../../Components/FollowButton";
 import SquarePost from "../../Components/SquarePost";
 import Button from "../../Components/Button";
+import Post from "../../Components/Post";
 
 const Wrapper = styled.div`
 	min-height: 100vh;
@@ -51,6 +52,16 @@ const Posts = styled.div`
 	grid-template-columns: repeat(4, 200px);
 	grid-template-rows: 200px;
 	grid-auto-rows: 200px;
+`;
+
+const PostDetail = styled(Post)`
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.6);
+	z-index: 4;
 `;
 
 export default ({ loading, data, logOut }) => {
