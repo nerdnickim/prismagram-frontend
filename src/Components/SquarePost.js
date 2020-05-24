@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { HeartFull, CommentFull } from "./Icons";
+import { useQuery } from "react-apollo-hooks";
+import PopUp from "./PopUp";
+import { FEED_QUERY } from "../SharedQueries";
+import Loader from "./Loader";
+import { HeartFull, CommentFull, CloseBtn } from "./Icons";
 
 const Overlay = styled.div`
 	background-color: rgba(0, 0, 0, 0.6);
@@ -18,6 +22,7 @@ const Overlay = styled.div`
 `;
 
 const Container = styled.div`
+	position: relative;
 	background-image: url(${(props) => props.bg});
 	background-size: cover;
 	cursor: pointer;
@@ -42,20 +47,82 @@ const NumberText = styled.span`
 	font-size: 18px;
 `;
 
-const SquarePost = ({ likeCount, commentCount, file }) => (
-	<Container bg={file.url}>
-		<Overlay>
-			<Number>
-				<HeartFull />
-				<NumberText>{likeCount}</NumberText>
-			</Number>
-			<Number>
-				<CommentFull />
-				<NumberText>{commentCount}</NumberText>
-			</Number>
-		</Overlay>
-	</Container>
-);
+const PostDetailClose = styled.div`
+	position: absolute;
+	top: 20px;
+	right: 40px;
+	cursor: pointer;
+	z-index: 5;
+`;
+
+const Loading = styled.div`
+	position: absolute;
+	top: 15%;
+	left: 40%;
+	z-index: 10;
+`;
+
+const SquarePost = ({ likeCount, commentCount, file }) => {
+	const { data, loading } = useQuery(FEED_QUERY);
+	let [postDetail, setPostDetail] = useState(false);
+
+	const postDetailShow = (e) => {
+		e.preventDefault();
+		if (postDetail === true) {
+			setPostDetail(false);
+			document.querySelector("body").style.overflow = "";
+		} else {
+			setPostDetail(true);
+			document.querySelector("body").style.overflow = "hidden";
+		}
+	};
+
+	return (
+		<>
+			<Container bg={file.url} onClick={postDetailShow}>
+				{postDetail === true && loading && (
+					<Loading>
+						<Loader />
+					</Loading>
+				)}
+				<Overlay>
+					<Number>
+						<HeartFull />
+						<NumberText>{likeCount}</NumberText>
+					</Number>
+					<Number>
+						<CommentFull />
+						<NumberText>{commentCount}</NumberText>
+					</Number>
+				</Overlay>
+			</Container>
+			{!postDetail && null}
+			{!loading &&
+				postDetail === true &&
+				data &&
+				data.seeFeed &&
+				data.seeFeed.map((post) => (
+					<PopUp
+						key={post.id}
+						id={post.id}
+						user={post.user}
+						files={post.files}
+						likeCount={post.likeCount}
+						isLiked={post.isLiked}
+						comments={post.comments}
+						createdAt={post.createdAt}
+						location={post.location}
+						caption={post.caption}
+					/>
+				))}
+			{!loading && postDetail ? (
+				<PostDetailClose onClick={postDetailShow}>
+					<CloseBtn />
+				</PostDetailClose>
+			) : null}
+		</>
+	);
+};
 
 SquarePost.propTypes = {
 	likeCount: PropTypes.number.isRequired,

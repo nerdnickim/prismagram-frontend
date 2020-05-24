@@ -8,7 +8,6 @@ import SquarePost from "../../Components/SquarePost";
 
 const Wrapper = styled.div`
 	height: 50vh;
-	text-align: center;
 `;
 
 const Section = styled.div`

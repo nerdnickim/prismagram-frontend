@@ -19,6 +19,18 @@ const GET_USER = gql`
 			postsCount
 			posts {
 				id
+				location
+				caption
+				isLiked
+				comments {
+					id
+					text
+					user {
+						id
+						username
+					}
+				}
+				createdAt
 				files {
 					id
 					url
@@ -30,7 +42,7 @@ const GET_USER = gql`
 	}
 `;
 
-export const LOG_OUT = gql`
+const LOG_OUT = gql`
 	mutation logUserOut {
 		logUserOut @client
 	}
