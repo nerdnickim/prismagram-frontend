@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Link, withRouter } from "react-router-dom";
 import Input from "./Input";
@@ -6,6 +6,7 @@ import useInput from "../Hooks/useInput";
 import { Compass, HeartEmpty, User, Logo } from "./Icons";
 import { useQuery } from "react-apollo-hooks";
 import { ME } from "../SharedQueries";
+import Notifications from "../Routes/Notifications";
 
 const Header = styled.header`
 	width: 100%;
@@ -57,22 +58,41 @@ const SearchInput = styled(Input)`
 	}
 `;
 
-const HeaderLink = styled(Link)`
+const HeaderLink = styled.span`
+	cursor: pointer;
 	&:not(:last-child) {
 		margin-right: 30px;
 	}
 `;
 
+const NotificationBox = styled.div`
+	${(props) => props.theme.whiteBox}
+	position: absolute;
+	width: 400px;
+	height: 300px;
+	margin-top: 20px;
+	overflow-y: scroll;
+`;
+
 export default withRouter(({ history }) => {
 	const search = useInput("");
 	const { data, loading } = useQuery(ME);
+	let [notification, setNotification] = useState(false);
 	if (loading) return "";
-	const { me } = data;
-	console.log(me);
 	const onSearchSubmit = (e) => {
 		e.preventDefault();
 		history.push(`/search?term=${search.value}`);
 	};
+
+	const notificationShow = (e) => {
+		e.preventDefault();
+		if (notification === true) {
+			setNotification(false);
+		} else {
+			setNotification(true);
+		}
+	};
+
 	return (
 		<Header>
 			<HeaderWrapper>
@@ -92,19 +112,30 @@ export default withRouter(({ history }) => {
 					</form>
 				</HeaderColumn>
 				<HeaderColumn>
-					<HeaderLink to="/explore">
-						<Compass />
+					<HeaderLink>
+						<Link to="/explore">
+							<Compass />
+						</Link>
 					</HeaderLink>
-					<HeaderLink to="/notifications">
+					<HeaderLink onClick={notificationShow}>
 						<HeartEmpty />
+						{notification === true ? (
+							<NotificationBox>
+								<Notifications />
+							</NotificationBox>
+						) : null}
 					</HeaderLink>
 					{!data.me ? (
-						<HeaderLink to="/#">
-							<User />
+						<HeaderLink>
+							<Link to="/#">
+								<User />
+							</Link>
 						</HeaderLink>
 					) : (
-						<HeaderLink to={data.me.username}>
-							<User />
+						<HeaderLink>
+							<Link to={data.me.username}>
+								<User />
+							</Link>
 						</HeaderLink>
 					)}
 				</HeaderColumn>
