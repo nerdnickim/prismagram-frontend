@@ -7,6 +7,7 @@ import FatText from "../../Components/FatText";
 import FollowButton from "../../Components/FollowButton";
 import SquarePost from "../../Components/SquarePost";
 import Button from "../../Components/Button";
+import { Link } from "react-router-dom";
 
 const Wrapper = styled.div`
 	min-height: 100vh;
@@ -98,10 +99,14 @@ export default ({ loading, data, logOut }) => {
 								<FatText text={String(postsCount)} /> posts
 							</Count>
 							<Count>
-								<FatText text={String(followersCount)} /> followers
+								<Link to="">
+									<FatText text={String(followersCount)} /> followers
+								</Link>
 							</Count>
 							<Count>
-								<FatText text={String(followingCount)} /> following
+								<Link to="">
+									<FatText text={String(followingCount)} /> following
+								</Link>
 							</Count>
 						</Counts>
 						<FatText text={fullName} />

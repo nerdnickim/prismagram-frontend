@@ -24,6 +24,7 @@ export const FEED_QUERY = gql`
 				url
 			}
 			likeCount
+			commentCount
 			isLiked
 			comments {
 				id
