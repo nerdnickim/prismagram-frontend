@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import { useQuery } from "react-apollo-hooks";
-import PopUp from "./PopUp";
-import { FEED_QUERY } from "../SharedQueries";
+import PopUpBridge from "./PopUpBridge";
+import { SEE_POST } from "../SharedQueries";
 import Loader from "./Loader";
 import { HeartFull, CommentFull, CloseBtn } from "./Icons";
 
@@ -62,8 +62,8 @@ const Loading = styled.div`
 	z-index: 10;
 `;
 
-const SquarePost = ({ likeCount, commentCount, file }) => {
-	const { data, loading } = useQuery(FEED_QUERY);
+const SquarePost = ({ likeCount, commentCount, file, id }) => {
+	const { data, loading } = useQuery(SEE_POST, { variables: { id } });
 	let [postDetail, setPostDetail] = useState(false);
 
 	const postDetailShow = (e) => {
@@ -97,24 +97,9 @@ const SquarePost = ({ likeCount, commentCount, file }) => {
 				</Overlay>
 			</Container>
 			{!postDetail && null}
-			{!loading &&
-				postDetail === true &&
-				data &&
-				data.seeFeed &&
-				data.seeFeed.map((post) => (
-					<PopUp
-						key={post.id}
-						id={post.id}
-						user={post.user}
-						files={post.files}
-						likeCount={post.likeCount}
-						isLiked={post.isLiked}
-						comments={post.comments}
-						createdAt={post.createdAt}
-						location={post.location}
-						caption={post.caption}
-					/>
-				))}
+			{!loading && postDetail === true && data && data.seeFullPost && (
+				<PopUpBridge data={data} />
+			)}
 			{!loading && postDetail ? (
 				<PostDetailClose onClick={postDetailShow}>
 					<CloseBtn />
@@ -128,6 +113,7 @@ SquarePost.propTypes = {
 	likeCount: PropTypes.number.isRequired,
 	commentCount: PropTypes.number.isRequired,
 	file: PropTypes.object.isRequired,
+	id: PropTypes.string.isRequired,
 };
 
 export default SquarePost;

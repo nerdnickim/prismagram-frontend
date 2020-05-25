@@ -70,7 +70,9 @@ const PostContainer = ({
 		const today = new Date();
 		const timeValue = new Date(value);
 
-		const betweenTime = Math.floor(today.getTime() - timeValue.getTime()) / 1000 / 60;
+		const betweenTime = Math.floor(
+			Math.floor(today.getTime() - timeValue.getTime()) / 1000 / 60
+		);
 		if (betweenTime < 1) {
 			return "방금 전";
 		} else if (betweenTime < 60) {

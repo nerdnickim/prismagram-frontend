@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useMutation } from "react-apollo-hooks";
 import PropTypes from "prop-types";
+import { toast } from "react-toastify";
 import PopUpPresenter from "./PopUpPresenter";
 import useInput from "../../Hooks/useInput";
-import { toast } from "react-toastify";
 import { TOGGLE_LIKE, ADD_COMMENT } from "../Post/PostQueries";
 
 const PopUpContainer = ({
@@ -39,7 +39,7 @@ const PopUpContainer = ({
 		slide();
 	}, [currentItem]);
 
-	const toggleLike = async () => {
+	const toggleLike = () => {
 		toggleLikeMutation();
 		if (isLikedS === true) {
 			setIsLiked(false);
@@ -70,7 +70,9 @@ const PopUpContainer = ({
 		const today = new Date();
 		const timeValue = new Date(value);
 
-		const betweenTime = Math.floor(today.getTime() - timeValue.getTime()) / 1000 / 60;
+		const betweenTime = Math.floor(
+			Math.floor(today.getTime() - timeValue.getTime()) / 1000 / 60
+		);
 		if (betweenTime < 1) {
 			return "방금 전";
 		} else if (betweenTime < 60) {

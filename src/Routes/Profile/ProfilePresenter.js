@@ -112,6 +112,7 @@ export default ({ loading, data, logOut }) => {
 						posts.map((post) => (
 							<SquarePost
 								key={post.files[0].id}
+								id={post.id}
 								likeCount={post.likeCount}
 								commentCount={post.commentCount}
 								file={post.files[0]}
