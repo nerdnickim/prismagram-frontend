@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { Link, withRouter } from "react-router-dom";
 import Input from "./Input";
 import useInput from "../Hooks/useInput";
-import { Compass, HeartEmpty, User, Logo } from "./Icons";
+import { Compass, HeartEmpty, User, Logo, HeartFull } from "./Icons";
 import { useQuery } from "react-apollo-hooks";
 import { ME } from "../SharedQueries";
 import Notifications from "../Routes/Notifications";
@@ -118,7 +118,7 @@ export default withRouter(({ history }) => {
 						</Link>
 					</HeaderLink>
 					<HeaderLink onClick={notificationShow}>
-						<HeartEmpty />
+						{notification === true ? <HeartFull /> : <HeartEmpty />}
 						{notification === true ? (
 							<NotificationBox>
 								<Notifications />

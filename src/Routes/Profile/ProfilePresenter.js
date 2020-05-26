@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { Helmet } from "react-helmet";
 import Avatar from "../../Components/Avatart";
@@ -7,7 +7,9 @@ import FatText from "../../Components/FatText";
 import FollowButton from "../../Components/FollowButton";
 import SquarePost from "../../Components/SquarePost";
 import Button from "../../Components/Button";
-import { Link } from "react-router-dom";
+import { CustomGear, CloseBtn } from "../../Components/Icons";
+import FollowBox from "../../Components/FollowBox";
+import EditProfile from "../EditProfile";
 
 const Wrapper = styled.div`
 	min-height: 100vh;
@@ -32,6 +34,7 @@ const UsernameRow = styled.div`
 const Username = styled.span`
 	font-size: 26px;
 	display: block;
+	margin-right: 10px;
 `;
 
 const Counts = styled.ul`
@@ -54,6 +57,16 @@ const Posts = styled.div`
 	grid-auto-rows: 200px;
 `;
 
+const CloseContain = styled.div`
+	position: absolute;
+	top: 20px;
+	right: 40px;
+	z-index: 11;
+	cursor: poninter;
+`;
+
+const GearContain = styled.div``;
+
 export default ({ loading, data, logOut }) => {
 	if (loading === true) {
 		return (
@@ -67,15 +80,55 @@ export default ({ loading, data, logOut }) => {
 				id,
 				avatar,
 				username,
+				firstName,
+				lastName,
 				fullName,
 				isFollowing,
-				followingCount,
-				followersCount,
+				following,
+				followers,
 				postsCount,
 				posts,
 				isMe,
 			},
 		} = data;
+		let [follow, setFollow] = useState(false);
+		let [followingS, setFollowingS] = useState(false);
+		let [custom, setcustom] = useState(false);
+
+		const showFollowBox = (e) => {
+			e.preventDefault();
+			if (follow === true) {
+				setFollow(false);
+				document.querySelector("body").style.overflow = "";
+				return;
+			} else {
+				setFollow(true);
+				document.querySelector("body").style.overflow = "hidden";
+			}
+		};
+
+		const showFollowingBox = (e) => {
+			e.preventDefault();
+			if (followingS === true) {
+				setFollowingS(false);
+				document.querySelector("body").style.overflow = "";
+			} else {
+				setFollowingS(true);
+				document.querySelector("body").style.overflow = "hidden";
+			}
+		};
+
+		const showCustom = (e) => {
+			e.preventDefault();
+			if (custom === true) {
+				setcustom(false);
+				document.querySelector("body").style.overflow = "";
+			} else {
+				setcustom(true);
+				document.querySelector("body").style.overflow = "hidden";
+			}
+		};
+
 		return (
 			<Wrapper>
 				<Header>
@@ -93,21 +146,50 @@ export default ({ loading, data, logOut }) => {
 							) : (
 								<FollowButton id={id} isFollowing={isFollowing} />
 							)}
+							{isMe ? (
+								<GearContain onClick={showCustom}>
+									<CustomGear />
+								</GearContain>
+							) : null}
 						</UsernameRow>
 						<Counts>
 							<Count>
 								<FatText text={String(postsCount)} /> posts
 							</Count>
-							<Count>
-								<Link to="">
-									<FatText text={String(followersCount)} /> followers
-								</Link>
+							<Count onClick={showFollowBox}>
+								<FatText text={String(followers.length)} /> followers
 							</Count>
-							<Count>
-								<Link to="">
-									<FatText text={String(followingCount)} /> following
-								</Link>
+							<Count onClick={showFollowingBox}>
+								<FatText text={String(following.length)} /> following
 							</Count>
+							{custom === true ? (
+								<>
+									<EditProfile
+										username={username}
+										firstName={firstName}
+										lastName={lastName}
+									/>
+									<CloseContain onClick={showCustom}>
+										<CloseBtn />
+									</CloseContain>
+								</>
+							) : null}
+							{follow === true ? (
+								<>
+									<FollowBox data={followers} />
+									<CloseContain onClick={showFollowBox}>
+										<CloseBtn />
+									</CloseContain>
+								</>
+							) : null}
+							{followingS === true ? (
+								<>
+									<FollowBox data={following} />
+									<CloseContain onClick={showFollowingBox}>
+										<CloseBtn />
+									</CloseContain>
+								</>
+							) : null}
 						</Counts>
 						<FatText text={fullName} />
 					</HeaderColumn>

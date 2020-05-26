@@ -12,7 +12,7 @@ const Wrapper = styled.div``;
 const Section = styled.ul``;
 
 const SectionList = styled.li`
-	border-bottom: 1px solid;
+	border-bottom: ${(props) => props.theme.boxBorder};
 	width: 100%;
 	display: flex;
 	align-items: center;

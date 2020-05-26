@@ -10,10 +10,24 @@ const GET_USER = gql`
 			id
 			avatar
 			username
+			firstName
+			lastName
 			fullName
 			isFollowing
 			bio
 			isMe
+			following {
+				id
+				username
+				avatar
+				isFollowing
+			}
+			followers {
+				id
+				username
+				avatar
+				isFollowing
+			}
 			followingCount
 			followersCount
 			postsCount
