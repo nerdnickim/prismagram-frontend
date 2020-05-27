@@ -25,11 +25,20 @@ const CustomBox = styled.div`
 	overflow-y: scroll;
 `;
 
-const Header = styled.header``;
+const Header = styled.header`
+	font-size: 18px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px 0;
+`;
 
-const Ul = styled.ul``;
-
-const Li = styled.li;
+const Section = styled.div`
+	form {
+		display: flex;
+		flex-direction: column;
+	}
+`;
 
 export default ({ username, firstName, lastName, onSubmit }) => {
 	return (
@@ -38,12 +47,14 @@ export default ({ username, firstName, lastName, onSubmit }) => {
 				<Header>
 					<FatText text={"Custom"} />
 				</Header>
-				<form onSubmit={onSubmit}>
-					<Input placeholder={"User Name"} {...username} />
-					<Input placeholder={"First Name"} {...firstName} />
-					<Input placeholder={"Last Name"} {...lastName} />
-					<Button text={"Submit"} />
-				</form>
+				<Section>
+					<form onSubmit={onSubmit}>
+						<Input placeholder={"User Name"} required {...username} />
+						<Input placeholder={"First Name"} {...firstName} />
+						<Input placeholder={"Last Name"} {...lastName} />
+						<Button text={"Submit"} />
+					</form>
+				</Section>
 			</CustomBox>
 		</Wrapper>
 	);

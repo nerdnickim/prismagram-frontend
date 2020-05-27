@@ -12,6 +12,12 @@ export const EDIT_PROFILE = gql`
 			firstName: $firstName
 			lastName: $lastName
 			avatar: $avatar
-		)
+		) {
+			id
+			username
+			firstName
+			lastName
+			fullName
+		}
 	}
 `;

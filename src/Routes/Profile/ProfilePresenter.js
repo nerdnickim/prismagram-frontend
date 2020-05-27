@@ -164,11 +164,7 @@ export default ({ loading, data, logOut }) => {
 							</Count>
 							{custom === true ? (
 								<>
-									<EditProfile
-										username={username}
-										firstName={firstName}
-										lastName={lastName}
-									/>
+									<EditProfile />
 									<CloseContain onClick={showCustom}>
 										<CloseBtn />
 									</CloseContain>
