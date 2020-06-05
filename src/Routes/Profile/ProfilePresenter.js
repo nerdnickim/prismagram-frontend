@@ -80,8 +80,6 @@ export default ({ loading, data, logOut }) => {
 				id,
 				avatar,
 				username,
-				firstName,
-				lastName,
 				fullName,
 				isFollowing,
 				following,

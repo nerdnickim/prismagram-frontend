@@ -36,7 +36,7 @@ const Notifications = () => {
 		return <Loader />;
 	} else if (!loading && data && data.me && data.me.posts) {
 		const {
-			me: { posts, isMe },
+			me: { posts },
 		} = data;
 		return (
 			<Wrapper>
