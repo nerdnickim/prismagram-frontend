@@ -7,7 +7,7 @@ import SquarePost from "../Components/SquarePost";
 import { Helmet } from "react-helmet";
 
 const Wrapper = styled.div`
-	height: 50vh;
+	height: 100%;
 `;
 
 const Section = styled.div`
