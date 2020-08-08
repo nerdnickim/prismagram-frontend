@@ -3,7 +3,17 @@ import styled from "styled-components";
 import { Link, withRouter } from "react-router-dom";
 import Input from "./Input";
 import useInput from "../Hooks/useInput";
-import { Compass, HeartEmpty, User, Logo, HeartFull } from "./Icons";
+import {
+	Compass,
+	HeartEmpty,
+	User,
+	Logo,
+	HeartFull,
+	Home,
+	HomeFull,
+	CompassFull,
+	UserFull,
+} from "./Icons";
 import { useQuery } from "react-apollo-hooks";
 import { ME } from "../SharedQueries";
 import Notifications from "../Routes/Notifications";
@@ -77,19 +87,71 @@ const NotificationBox = styled.div`
 export default withRouter(({ history }) => {
 	const search = useInput("");
 	const { data, loading } = useQuery(ME);
-	let [notification, setNotification] = useState(false);
+	let [state, setState] = useState({
+		notification: false,
+		home: true,
+		compass: false,
+		user: false,
+	});
 	if (loading) return "";
 	const onSearchSubmit = (e) => {
 		e.preventDefault();
 		history.push(`/search?term=${search.value}`);
 	};
 
-	const notificationShow = (e) => {
+	const notificationHandle = (e) => {
+		e.persist();
 		e.preventDefault();
-		if (notification === true) {
-			setNotification(false);
-		} else {
-			setNotification(true);
+		if (state.notification === false) {
+			setState((prev) => ({
+				...prev,
+				notification: !state.notification,
+				home: false,
+				compass: false,
+				user: false,
+			}));
+		}
+	};
+
+	const homeHandle = (e) => {
+		e.persist();
+		e.preventDefault();
+		if (state.home === false) {
+			setState((prev) => ({
+				...prev,
+				notification: false,
+				home: !state.home,
+				compass: false,
+				user: false,
+			}));
+		}
+	};
+
+	const compoassHandle = (e) => {
+		e.persist();
+		e.preventDefault();
+		if (state.compass === false) {
+			setState((prev) => ({
+				...prev,
+				notification: false,
+				home: false,
+				compass: !state.compass,
+				user: false,
+			}));
+		}
+	};
+
+	const userHandle = (e) => {
+		e.persist();
+		e.preventDefault();
+		if (state.user === false) {
+			setState((prev) => ({
+				...prev,
+				notification: false,
+				home: false,
+				compass: false,
+				user: !state.user,
+			}));
 		}
 	};
 
@@ -112,14 +174,17 @@ export default withRouter(({ history }) => {
 					</form>
 				</HeaderColumn>
 				<HeaderColumn>
-					<HeaderLink>
+					<HeaderLink onClick={homeHandle}>
+						<Link to="/">{state.home === true ? <HomeFull /> : <Home />}</Link>
+					</HeaderLink>
+					<HeaderLink onClick={compoassHandle}>
 						<Link to="/explore">
-							<Compass />
+							{state.compass === true ? <CompassFull /> : <Compass />}
 						</Link>
 					</HeaderLink>
-					<HeaderLink onClick={notificationShow}>
-						{notification === true ? <HeartFull /> : <HeartEmpty />}
-						{notification === true ? (
+					<HeaderLink onClick={notificationHandle}>
+						{state.notification === true ? <HeartFull /> : <HeartEmpty />}
+						{state.notification === true ? (
 							<NotificationBox>
 								<Notifications />
 							</NotificationBox>
@@ -132,10 +197,8 @@ export default withRouter(({ history }) => {
 							</Link>
 						</HeaderLink>
 					) : (
-						<HeaderLink>
-							<Link to={data.me.username}>
-								<User />
-							</Link>
+						<HeaderLink onClick={userHandle}>
+							<Link to={data.me.username}>{state.user ? <UserFull /> : <User />}</Link>
 						</HeaderLink>
 					)}
 				</HeaderColumn>

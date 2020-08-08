@@ -49,6 +49,14 @@ const Count = styled.li`
 	}
 `;
 
+const FollowContain = styled.li`
+	font-size: 14px;
+	&:not(:last-child) {
+		margin-right: 10px;
+	}
+	cursor: pointer;
+`;
+
 const Posts = styled.div`
 	margin-bottom: 10px;
 	display: grid;
@@ -65,7 +73,10 @@ const CloseContain = styled.div`
 	cursor: poninter;
 `;
 
-const GearContain = styled.div``;
+const GearContain = styled.div`
+	margin-left: 5px;
+	cursor: pointer;
+`;
 
 export default ({ loading, data, logOut }) => {
 	if (loading === true) {
@@ -154,12 +165,12 @@ export default ({ loading, data, logOut }) => {
 							<Count>
 								<FatText text={String(postsCount)} /> posts
 							</Count>
-							<Count onClick={showFollowBox}>
+							<FollowContain onClick={showFollowBox}>
 								<FatText text={String(followers.length)} /> followers
-							</Count>
-							<Count onClick={showFollowingBox}>
+							</FollowContain>
+							<FollowContain onClick={showFollowingBox}>
 								<FatText text={String(following.length)} /> following
-							</Count>
+							</FollowContain>
 							{custom === true ? (
 								<>
 									<EditProfile />
