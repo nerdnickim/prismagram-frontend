@@ -7,6 +7,11 @@ export const ME = gql`
 			username
 			updatedAt
 			isMe
+			following {
+				id
+				avatar
+				username
+			}
 			posts {
 				id
 				isLiked

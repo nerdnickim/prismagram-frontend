@@ -4,7 +4,8 @@ import styled from "styled-components";
 import { useQuery } from "react-apollo-hooks";
 import Loader from "../Components/Loader";
 import Post from "../Components/Post";
-import { FEED_QUERY } from "../SharedQueries";
+import { FEED_QUERY, ME } from "../SharedQueries";
+import FollowingUser from "../Components/FollowingUser";
 
 const Wrapper = styled.div`
 	display: flex;
@@ -15,12 +16,14 @@ const Wrapper = styled.div`
 
 export default () => {
 	const { data, loading } = useQuery(FEED_QUERY);
+	const { data: dataMe } = useQuery(ME);
 	return (
 		<Wrapper>
 			<Helmet>
 				<title>Feed | Prismagram</title>
 			</Helmet>
 			{loading && <Loader />}
+			{!loading && dataMe?.me && <FollowingUser data={dataMe?.me?.following} />}
 			{!loading &&
 				data &&
 				data.seeFeed &&
