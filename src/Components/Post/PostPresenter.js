@@ -3,7 +3,7 @@ import styled from "styled-components";
 import TextareaAutosize from "react-autosize-textarea";
 import FatText from "../FatText";
 import Avatar from "../Avatart";
-import { HeartFull, HeartEmpty, Comment as CommentIcon } from "../Icons";
+import { HeartFull, HeartEmpty, Comment as CommentIcon, Arrow } from "../Icons";
 import Loader from "../Loader";
 import { Link } from "react-router-dom";
 
@@ -34,26 +34,24 @@ const Location = styled.span`
 	font-size: 12px;
 `;
 
+const FilesWrapper = styled.div`
+	position: relative;
+	overflow: hidden;
+`;
+
 const Files = styled.div`
 	position: relative;
-	padding-bottom: 100%;
 	display: flex;
-	flex-direction: column;
-	align-items: stretch;
-	flex-shrink: 0;
+	transition: all 0.2s ease-out;
 `;
 
 const File = styled.img`
-	max-width: 100%;
-	width: 100%;
+	position: relative;
+	min-width: 100%;
 	height: 600px;
-	position: absolute;
-	top: 0;
 	background-image: url(${(props) => props.src});
 	background-size: cover;
 	background-position: center;
-	opacity: ${(props) => (props.showing ? 1 : 0)};
-	transition: opacity 0.5s;
 `;
 
 const Button = styled.span`
@@ -111,6 +109,24 @@ const Comment = styled.li`
 	}
 `;
 
+const ArrowContain = styled.div`
+	position: absolute;
+	top: 45%;
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: space-between;
+`;
+
+const ArrowRight = styled.div`
+	padding-left: 10px;
+`;
+
+const ArrowLeft = styled.div`
+	transform: rotateY(180deg);
+	padding-right: 10px;
+`;
+
 export default ({
 	user: { username, avatar },
 	location,
@@ -126,6 +142,9 @@ export default ({
 	selfComments,
 	loading,
 	gapCreatedAt,
+	slideRight,
+	slideLeft,
+	slideRef,
 }) => (
 	<Post>
 		<Header>
@@ -137,17 +156,19 @@ export default ({
 				<Location>{location}</Location>
 			</UserColumn>
 		</Header>
-		<Files>
-			{files &&
-				files.map((file, index) => (
-					<File
-						key={file.id}
-						id={file.id}
-						src={file.url}
-						showing={index === currentItem}
-					/>
-				))}
-		</Files>
+		<FilesWrapper>
+			<Files ref={slideRef}>
+				{files && files.map((file) => <File key={file.id} id={file.id} src={file.url} />)}
+			</Files>
+			<ArrowContain>
+				<ArrowLeft onClick={slideLeft}>
+					<Arrow />
+				</ArrowLeft>
+				<ArrowRight onClick={slideRight}>
+					<Arrow />
+				</ArrowRight>
+			</ArrowContain>
+		</FilesWrapper>
 		<Meta>
 			<Buttons>
 				<Button onClick={toggleLike}>{isLiked ? <HeartFull /> : <HeartEmpty />}</Button>

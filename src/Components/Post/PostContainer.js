@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import PropTypes from "prop-types";
 import useInput from "../../Hooks/useInput";
 import PostPresenter from "./PostPresenter";
@@ -26,18 +26,33 @@ const PostContainer = ({
 	const [addCommentMutation, { loading }] = useMutation(ADD_COMMENT, {
 		variables: { postId: id, text: comment.value },
 	});
-	const slide = () => {
+	const slideRef = useRef(null);
+
+	const slideRight = (e) => {
+		e.persist();
 		const totalFiles = files.length;
-		if (currentItem === totalFiles - 1) {
-			setTimeout(() => setCurrentItem(0), 2000);
+		if (currentItem < totalFiles - 1) {
+			setCurrentItem(currentItem + 1);
+			slideRef.current.style.transform = `translateX(-${
+				(currentItem + 1) * slideRef.current.clientWidth
+			}px)`;
 		} else {
-			setTimeout(() => setCurrentItem(currentItem + 1), 2000);
+			return;
 		}
 	};
 
-	useEffect(() => {
-		slide();
-	}, [currentItem]);
+	const slideLeft = (e) => {
+		e.persist();
+
+		if (currentItem === 0) {
+			return;
+		} else {
+			setCurrentItem(currentItem - 1);
+			slideRef.current.style.transform = `translateX(-${
+				(currentItem - 1) * slideRef.current.clientWidth
+			}px)`;
+		}
+	};
 
 	const toggleLike = async () => {
 		toggleLikeMutation();
@@ -111,6 +126,9 @@ const PostContainer = ({
 			selfComments={selfComments}
 			loading={loading}
 			gapCreatedAt={gapCreatedAt}
+			slideRight={slideRight}
+			slideLeft={slideLeft}
+			slideRef={slideRef}
 		/>
 	);
 };
