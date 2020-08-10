@@ -6,12 +6,14 @@ import Feed from "../Routes/Feed";
 import Explore from "../Routes/Explore";
 import Search from "../Routes/Search";
 import Profile from "../Routes/Profile";
+import Messages from "../Routes/Messages";
 
 const LoggerInRoutes = () => (
 	<Switch>
 		<Route exact path="/" component={Feed} />
 		<Route path="/explore" component={Explore} />
 		<Route path="/search" component={Search} />
+		<Route path="/message" component={Messages} />
 		<Route path="/:username" component={Profile} />
 		<Redirect from="*" to="/" />
 	</Switch>

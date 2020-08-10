@@ -13,6 +13,8 @@ import {
 	HomeFull,
 	CompassFull,
 	UserFull,
+	MessageLogo,
+	MessageFullLogo,
 } from "./Icons";
 import { useQuery } from "react-apollo-hooks";
 import { ME } from "../SharedQueries";
@@ -92,6 +94,7 @@ export default withRouter(({ history }) => {
 		home: true,
 		compass: false,
 		user: false,
+		message: false,
 	});
 	if (loading) return "";
 	const onSearchSubmit = (e) => {
@@ -106,9 +109,11 @@ export default withRouter(({ history }) => {
 			setState((prev) => ({
 				...prev,
 				notification: !state.notification,
-				home: false,
-				compass: false,
-				user: false,
+			}));
+		} else if (state.notification === true) {
+			setState((prev) => ({
+				...prev,
+				notification: false,
 			}));
 		}
 	};
@@ -123,6 +128,7 @@ export default withRouter(({ history }) => {
 				home: !state.home,
 				compass: false,
 				user: false,
+				message: false,
 			}));
 		}
 	};
@@ -137,6 +143,7 @@ export default withRouter(({ history }) => {
 				home: false,
 				compass: !state.compass,
 				user: false,
+				message: false,
 			}));
 		}
 	};
@@ -151,6 +158,22 @@ export default withRouter(({ history }) => {
 				home: false,
 				compass: false,
 				user: !state.user,
+				message: false,
+			}));
+		}
+	};
+
+	const messageHandle = (e) => {
+		e.persist();
+		e.preventDefault();
+		if (state.user === false) {
+			setState((prev) => ({
+				...prev,
+				notification: false,
+				home: false,
+				compass: false,
+				user: false,
+				message: !state.message,
 			}));
 		}
 	};
@@ -181,6 +204,20 @@ export default withRouter(({ history }) => {
 						<Link to="/explore">
 							{state.compass === true ? <CompassFull /> : <Compass />}
 						</Link>
+					</HeaderLink>
+					<HeaderLink onClick={messageHandle}>
+						{data.me && (
+							<Link
+								to={{
+									pathname: "/message",
+									state: {
+										meId: data?.me?.id,
+									},
+								}}
+							>
+								{state.message === true ? <MessageFullLogo /> : <MessageLogo />}
+							</Link>
+						)}
 					</HeaderLink>
 					<HeaderLink onClick={notificationHandle}>
 						{state.notification === true ? <HeartFull /> : <HeartEmpty />}
