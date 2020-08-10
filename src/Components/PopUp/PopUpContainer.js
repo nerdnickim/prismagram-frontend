@@ -32,7 +32,7 @@ const PopUpContainer = ({
 		e.persist();
 		const totalFiles = files.length;
 		if (currentItem < totalFiles - 1) {
-			setCurrentItem(currentItem + 1);
+			setCurrentItem((prev) => prev + 1);
 			slideRef.current.style.transform = `translateX(-${
 				(currentItem + 1) * slideRef.current.clientWidth
 			}px)`;
@@ -47,7 +47,7 @@ const PopUpContainer = ({
 		if (currentItem === 0) {
 			return;
 		} else {
-			setCurrentItem(currentItem - 1);
+			setCurrentItem((prev) => prev - 1);
 			slideRef.current.style.transform = `translateX(-${
 				(currentItem - 1) * slideRef.current.clientWidth
 			}px)`;
@@ -128,6 +128,7 @@ const PopUpContainer = ({
 			slideRight={slideRight}
 			slideLeft={slideLeft}
 			slideRef={slideRef}
+			currentItem={currentItem}
 		/>
 	);
 };

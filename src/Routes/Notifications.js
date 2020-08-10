@@ -36,22 +36,24 @@ const Notifications = () => {
 		return <Loader />;
 	} else if (!loading && data && data.me && data.me.posts) {
 		const {
-			me: { posts },
+			me: { posts, id },
 		} = data;
 		return (
 			<Wrapper>
 				<Section>
 					{posts.map((post) =>
-						post.likes.map((like) => (
-							<SectionList key={like.user.id} id={like.user.id}>
-								<Link to={`/${like.user.username}`}>
-									<Avatar size="sm" url={like.user.avatar} />
-								</Link>
-								{<FatText text={like.user.username} />}
-								님이 회원님의 사진을 좋아합니다
-								<PostImg bg={post.files[0].url} />
-							</SectionList>
-						))
+						post.likes.map((like) =>
+							id === like.user.id ? null : (
+								<SectionList key={like.user.id} id={like.user.id}>
+									<Link to={`/${like.user.username}`}>
+										<Avatar size="sm" url={like.user.avatar} />
+									</Link>
+									{<FatText text={like.user.username} />}
+									님이 회원님의 사진을 좋아합니다
+									<PostImg bg={post.files[0].url} />
+								</SectionList>
+							)
+						)
 					)}
 				</Section>
 			</Wrapper>

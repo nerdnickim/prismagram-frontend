@@ -120,11 +120,15 @@ const ArrowContain = styled.div`
 
 const ArrowRight = styled.div`
 	padding-left: 10px;
+	cursor: pointer;
+	opacity: ${(props) => (props.currentItem === props.length - 1 ? 0.2 : 1)};
 `;
 
 const ArrowLeft = styled.div`
 	transform: rotateY(180deg);
 	padding-right: 10px;
+	cursor: pointer;
+	opacity: ${(props) => (props.currentItem === 0 ? 0.2 : 1)};
 `;
 
 export default ({
@@ -144,6 +148,7 @@ export default ({
 	slideRight,
 	slideLeft,
 	slideRef,
+	currentItem,
 }) => (
 	<Post>
 		<Header>
@@ -160,10 +165,10 @@ export default ({
 				{files && files.map((file) => <File key={file.id} id={file.id} src={file.url} />)}
 			</Files>
 			<ArrowContain>
-				<ArrowLeft onClick={slideLeft}>
+				<ArrowLeft onClick={slideLeft} currentItem={currentItem}>
 					<Arrow />
 				</ArrowLeft>
-				<ArrowRight onClick={slideRight}>
+				<ArrowRight onClick={slideRight} currentItem={currentItem} length={files.length}>
 					<Arrow />
 				</ArrowRight>
 			</ArrowContain>
