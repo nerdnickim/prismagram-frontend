@@ -173,7 +173,7 @@ export default ({ loading, data, logOut }) => {
 							</FollowContain>
 							{custom === true ? (
 								<>
-									<EditProfile />
+									<EditProfile avatar={avatar} username={username} />
 									<CloseContain onClick={showCustom}>
 										<CloseBtn />
 									</CloseContain>

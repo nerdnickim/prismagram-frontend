@@ -5,6 +5,7 @@ export const ME = gql`
 		me {
 			id
 			username
+			avatar
 			updatedAt
 			isMe
 			following {

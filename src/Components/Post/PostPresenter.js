@@ -135,7 +135,6 @@ export default ({
 	likeCount,
 	createdAt,
 	newComment,
-	currentItem,
 	toggleLike,
 	onKeyPress,
 	comments,

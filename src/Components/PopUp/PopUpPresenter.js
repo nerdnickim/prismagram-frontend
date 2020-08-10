@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 import Loader from "../Loader";
-import { HeartFull, HeartEmpty, Comment as CommentIcon } from "../Icons";
+import { HeartFull, HeartEmpty, Comment as CommentIcon, Arrow } from "../Icons";
 import Avatar from "../Avatart";
 import FatText from "../FatText";
 import { Link } from "react-router-dom";
@@ -33,17 +33,21 @@ const PostFilesContain = styled.div`
 	height: 100%;
 	position: relative;
 	float: left;
+	overflow: hidden;
+`;
+
+const PostFiles = styled.div`
+	position: relative;
+	display: flex;
+	transition: all 0.2s ease-out;
+	height: 100%;
 `;
 
 const PostFile = styled.img`
-	width: 100%;
+	min-width: 100%;
 	height: 100%;
-	position: absolute;
-	top: 0;
-	background-image: url(${(props) => props.src});
 	background-size: cover;
 	background-position: center;
-	transition: opacity 0.5s;
 `;
 
 const PostInfoContain = styled.div`
@@ -127,6 +131,24 @@ const Comment = styled.li`
 	}
 `;
 
+const ArrowContain = styled.div`
+	position: absolute;
+	top: 45%;
+	display: flex;
+	flex-direction: row;
+	width: 100%;
+	justify-content: space-between;
+`;
+
+const ArrowRight = styled.div`
+	padding-left: 10px;
+`;
+
+const ArrowLeft = styled.div`
+	transform: rotateY(180deg);
+	padding-right: 10px;
+`;
+
 export default ({
 	user: { username, avatar },
 	location,
@@ -135,27 +157,38 @@ export default ({
 	likeCount,
 	createdAt,
 	newComment,
-	currentItem,
 	toggleLike,
 	onKeyPress,
 	comments,
 	selfComments,
 	loading,
 	gapCreatedAt,
+	slideLeft,
+	slideRight,
+	slideRef,
 }) => {
 	return (
 		<PostDetailWrapper>
 			<PostDetail>
 				<PostFilesContain>
-					{files &&
-						files.map((file, index) => (
-							<PostFile
-								key={file.id}
-								id={file.id}
-								src={file.url}
-								showing={index === currentItem}
-							/>
-						))}
+					<PostFiles ref={slideRef}>
+						{files &&
+							files.map((file, index) => (
+								<PostFile
+									key={file.id}
+									id={file.id}
+									src={file.url}
+								/>
+							))}
+					</PostFiles>
+					<ArrowContain>
+						<ArrowLeft onClick={slideLeft}>
+							<Arrow />
+						</ArrowLeft>
+						<ArrowRight onClick={slideRight}>
+							<Arrow />
+						</ArrowRight>
+					</ArrowContain>
 				</PostFilesContain>
 				<PostInfoContain>
 					<Header>

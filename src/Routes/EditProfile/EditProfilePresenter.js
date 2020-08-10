@@ -3,6 +3,8 @@ import styled from "styled-components";
 import Input from "../../Components/Input";
 import Button from "../../Components/Button";
 import FatText from "../../Components/FatText";
+import Loading from "../../Components/Loading";
+import Avatar from "../../Components/Avatart";
 
 const Wrapper = styled.div`
 	position: absolute;
@@ -33,28 +35,61 @@ const Header = styled.header`
 	padding: 10px 0;
 `;
 
+const Body = styled.div`
+	display: flex;
+`;
+
 const Section = styled.div`
+	width: 60%;
+	margin: 10px 0 0 10px;
 	form {
 		display: flex;
 		flex-direction: column;
 	}
 `;
 
-export default ({ username, firstName, lastName, onSubmit }) => {
+const AvatarSelect = styled.div`
+	width: 35%;
+	justify-content: center;
+	display: flex;
+
+	input[type="file"] {
+		display: none;
+	}
+`;
+
+export default ({
+	username,
+	firstName,
+	lastName,
+	onSubmit,
+	loading,
+	loadingA,
+	avatar,
+	changeAvatar,
+}) => {
 	return (
 		<Wrapper>
 			<CustomBox>
 				<Header>
 					<FatText text={"Custom"} />
 				</Header>
-				<Section>
-					<form onSubmit={onSubmit}>
-						<Input placeholder={"User Name"} required {...username} />
-						<Input placeholder={"First Name"} {...firstName} />
-						<Input placeholder={"Last Name"} {...lastName} />
-						<Button text={"Submit"} />
-					</form>
-				</Section>
+				<Body>
+					<Section>
+						<form onSubmit={onSubmit}>
+							<Input placeholder={"User Name"} required {...username} type="text" />
+							<Input placeholder={"First Name"} {...firstName} type="text" />
+							<Input placeholder={"Last Name"} {...lastName} type="text" />
+							{loading ? <Loading /> : <Button text={"Submit"} />}
+						</form>
+					</Section>
+					<AvatarSelect>
+						<label htmlFor="avatar-img">
+							{loadingA ? <Loading /> : <Avatar size="lg" url={avatar} />}
+						</label>
+						<input type="file" id="avatar-img" accept="image/*" onChange={changeAvatar} />
+					</AvatarSelect>
+				</Body>
 			</CustomBox>
 		</Wrapper>
 	);

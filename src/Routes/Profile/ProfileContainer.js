@@ -4,7 +4,7 @@ import { withRouter } from "react-router-dom";
 import { gql } from "apollo-boost";
 import ProfilePresenter from "./ProfilePresenter";
 
-const GET_USER = gql`
+export const GET_USER = gql`
 	query seeUser($username: String!) {
 		seeUser(username: $username) {
 			id

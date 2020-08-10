@@ -120,7 +120,6 @@ const PostContainer = ({
 			setLikeCount={setLikeCount}
 			caption={caption}
 			location={location}
-			currentItem={currentItem}
 			toggleLike={toggleLike}
 			onKeyPress={onKeyPress}
 			selfComments={selfComments}
