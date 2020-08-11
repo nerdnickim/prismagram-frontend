@@ -206,18 +206,16 @@ export default withRouter(({ history }) => {
 						</Link>
 					</HeaderLink>
 					<HeaderLink onClick={messageHandle}>
-						{data.me && (
-							<Link
-								to={{
-									pathname: "/message",
-									state: {
-										meId: data?.me?.id,
-									},
-								}}
-							>
-								{state.message === true ? <MessageFullLogo /> : <MessageLogo />}
-							</Link>
-						)}
+						<Link
+							to={{
+								pathname: "/message",
+								state: {
+									meId: data?.me?.id,
+								},
+							}}
+						>
+							{state.message === true ? <MessageFullLogo /> : <MessageLogo />}
+						</Link>
 					</HeaderLink>
 					<HeaderLink onClick={notificationHandle}>
 						{state.notification === true ? <HeartFull /> : <HeartEmpty />}

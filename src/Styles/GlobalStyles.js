@@ -21,4 +21,10 @@ export default createGlobalStyle`
     input:focus{
         outline:none;
     }
+    button{
+        background:inherit;
+        border:none;
+        cursor:pointer;
+        outline:none;
+    }
 `;
