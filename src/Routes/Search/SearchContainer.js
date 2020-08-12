@@ -1,6 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router-dom";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery } from "@apollo/client";
 import SearchPresenter from "./SearchPresenter";
 import { SEARCH } from "./SearchQueries";
 

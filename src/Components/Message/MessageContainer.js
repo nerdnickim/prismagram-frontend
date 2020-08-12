@@ -22,7 +22,8 @@ const MessageContainer = ({ id, toId }) => {
 				return;
 			} else {
 				console.log("Enter");
-				await sendMessage();
+				const { data } = await sendMessage();
+				console.log(data);
 				messageInput.setValue("");
 			}
 		}

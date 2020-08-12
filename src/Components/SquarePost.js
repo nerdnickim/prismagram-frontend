@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery } from "@apollo/client";
 import PopUpBridge from "./PopUpBridge";
 import { SEE_POST } from "../SharedQueries";
 import Loader from "./Loader";
