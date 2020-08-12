@@ -1,7 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
 import styled from "styled-components";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery } from "@apollo/client";
 import Loader from "../Components/Loader";
 import Post from "../Components/Post";
 import { FEED_QUERY, ME } from "../SharedQueries";

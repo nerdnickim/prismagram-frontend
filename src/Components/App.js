@@ -1,6 +1,5 @@
-import React from "react";
-import { gql } from "apollo-boost";
-import { useQuery } from "react-apollo-hooks";
+import React, { Fragment } from "react";
+import { useQuery } from "@apollo/client";
 import styled, { ThemeProvider } from "styled-components";
 import { HashRouter as Router } from "react-router-dom";
 import GlobalStyles from "../Styles/GlobalStyles";
@@ -10,12 +9,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Routes from "./Routes";
 import Footer from "./Footer";
 import Header from "./Header";
-
-const QUERY = gql`
-	{
-		isLoggedIn @client
-	}
-`;
+import { QUERY } from "../localQuery";
 
 const Wrapper = styled.div`
 	margin: 0 auto;
@@ -29,20 +23,22 @@ export default () => {
 	} = useQuery(QUERY);
 
 	return (
-		<ThemeProvider theme={Theme}>
-			<>
-				<GlobalStyles />
-				<Router>
-					<>
-						{isLoggedIn && <Header />}
-						<Wrapper>
-							<Routes isLoggedIn={isLoggedIn} />
-							<Footer />
-						</Wrapper>
-					</>
-				</Router>
-				<ToastContainer position={toast.POSITION.BOTTOM_LEFT} />
-			</>
-		</ThemeProvider>
+		<Fragment>
+			<ThemeProvider theme={Theme}>
+				<>
+					<GlobalStyles />
+					<Router>
+						<>
+							{isLoggedIn && <Header />}
+							<Wrapper>
+								<Routes isLoggedIn={isLoggedIn} />
+								<Footer />
+							</Wrapper>
+						</>
+					</Router>
+					<ToastContainer position={toast.POSITION.BOTTOM_LEFT} />
+				</>
+			</ThemeProvider>
+		</Fragment>
 	);
 };

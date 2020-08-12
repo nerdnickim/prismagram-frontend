@@ -5,6 +5,7 @@ import FatText from "../FatText";
 import Loading from "../Loading";
 import Avatar from "../Avatart";
 import { Link } from "react-router-dom";
+import TextareaAutosize from "react-autosize-textarea/lib";
 
 const Wrapper = styled.div`
 	display: flex;
@@ -76,9 +77,22 @@ const To = styled.div`
 const TextInputContain = styled.div`
 	width: 100%;
 	height: 20%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 `;
 
-const MessagePresenter = ({ data, loading }) => {
+const TextArea = styled(TextareaAutosize)`
+	border: none;
+	width: 100%;
+	font-size: 14px;
+	resize: none;
+	&:focus {
+		outline: none;
+	}
+`;
+
+const MessagePresenter = ({ data, loading, onKeyPress, messageInput }) => {
 	return (
 		<Wrapper>
 			{loading ? (
@@ -116,7 +130,14 @@ const MessagePresenter = ({ data, loading }) => {
 								</Text>
 							))}
 						</TextContain>
-						<TextInputContain></TextInputContain>
+						<TextInputContain>
+							<TextArea
+								placeholder="Input message ..."
+								onKeyPress={onKeyPress}
+								value={messageInput.value}
+								onChange={messageInput.onChange}
+							/>
+						</TextInputContain>
 					</Body>
 				</>
 			) : (

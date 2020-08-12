@@ -16,7 +16,7 @@ import {
 	MessageLogo,
 	MessageFullLogo,
 } from "./Icons";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery } from "@apollo/client";
 import { ME } from "../SharedQueries";
 import Notifications from "../Routes/Notifications";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useQuery } from "react-apollo-hooks";
+import { useQuery } from "@apollo/client";
 import { ME } from "../SharedQueries";
 import Loader from "../Components/Loader";
 import FatText from "../Components/FatText";
