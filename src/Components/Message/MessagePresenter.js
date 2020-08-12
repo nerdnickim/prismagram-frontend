@@ -46,7 +46,8 @@ const TextContain = styled.ul`
 	display: flex;
 	flex-direction: column;
 	width: 100%;
-	height: 80%;
+	max-height: 600px;
+	height: 100%;
 	overflow-y: scroll;
 `;
 
@@ -92,7 +93,15 @@ const TextArea = styled(TextareaAutosize)`
 	}
 `;
 
-const MessagePresenter = ({ data, loading, onKeyPress, messageInput }) => {
+const MessagePresenter = ({
+	data,
+	loading,
+	onKeyPress,
+	messageInput,
+	messages,
+	toId,
+	sendLoading,
+}) => {
 	return (
 		<Wrapper>
 			{loading ? (
@@ -115,7 +124,23 @@ const MessagePresenter = ({ data, loading, onKeyPress, messageInput }) => {
 						<TextContain>
 							{data?.messages?.map((m) => (
 								<Text key={m.id}>
-									{m.from.isMe === true ? (
+									{m.from.isMe === false ? (
+										<ToContain>
+											<Avatar size="sm" url={m.from.avatar} />
+											<To>
+												<FatText text={m.text} />
+											</To>
+										</ToContain>
+									) : (
+										<From>
+											<FatText text={m.text} />
+										</From>
+									)}
+								</Text>
+							))}
+							{messages.map((m) => (
+								<Text key={m.id}>
+									{m.to.id === toId ? (
 										<From>
 											<FatText text={m.text} />
 										</From>
@@ -131,12 +156,16 @@ const MessagePresenter = ({ data, loading, onKeyPress, messageInput }) => {
 							))}
 						</TextContain>
 						<TextInputContain>
-							<TextArea
-								placeholder="Input message ..."
-								onKeyPress={onKeyPress}
-								value={messageInput.value}
-								onChange={messageInput.onChange}
-							/>
+							{sendLoading ? (
+								<Loading />
+							) : (
+								<TextArea
+									placeholder="Input message ..."
+									onKeyPress={onKeyPress}
+									value={messageInput.value}
+									onChange={messageInput.onChange}
+								/>
+							)}
 						</TextInputContain>
 					</Body>
 				</>

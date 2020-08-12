@@ -1,7 +1,8 @@
-import { ApolloClient, HttpLink, InMemoryCache } from "@apollo/client";
+import { ApolloClient, HttpLink, InMemoryCache, ApolloLink, split } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
 import { WebSocketLink } from "@apollo/client/link/ws";
-import { SubscriptionClient } from "subscriptions-transport-ws";
+import { getMainDefinition } from "@apollo/client/utilities";
+import { onError } from "@apollo/client/link/error";
 import { QUERY } from "../localQuery";
 import { resolvers } from "./LocalState";
 
@@ -21,11 +22,15 @@ const httpLink = new HttpLink({
 			: "https://cloneinggram-backend.herokuapp.com",
 });
 
-const sub = new SubscriptionClient("ws://localhost:4000", {
-	reconnect: true,
+const wsLink = new WebSocketLink({
+	uri:
+		process.env.NODE_ENV === "development"
+			? "ws://localhost:4000"
+			: "ws://cloneinggram-backend.herokuapp.com",
+	options: {
+		reconnect: true,
+	},
 });
-
-const wsLink = new WebSocketLink(sub);
 
 const authLink = setContext((_, { headers }) => {
 	const token = localStorage.getItem("token");
@@ -40,8 +45,30 @@ const authLink = setContext((_, { headers }) => {
 
 const client = new ApolloClient({
 	cache,
-	link: authLink.concat(httpLink, wsLink),
 	resolvers,
+	link: ApolloLink.from([
+		authLink,
+		onError(({ graphQLErrors, networkError }) => {
+			if (graphQLErrors)
+				graphQLErrors.map(({ message, locations, path }) =>
+					console.log(
+						`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
+					)
+				);
+			if (networkError) console.log(`[Network error]: ${networkError}`);
+		}),
+		split(
+			({ query }) => {
+				const definition = getMainDefinition(query);
+				return (
+					definition.kind === "OperationDefinition" &&
+					definition.operation === "subscription"
+				);
+			},
+			wsLink,
+			httpLink
+		),
+	]),
 });
 
 export default client;

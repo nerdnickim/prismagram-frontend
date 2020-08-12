@@ -69,7 +69,7 @@ const UserButton = styled.button`
 	align-items: center;
 `;
 
-export default ({ data, state, partUserHandle, id, toId }) => {
+export default ({ data, partUserHandle, roomId, toId }) => {
 	return (
 		<Wrapper>
 			<Contain>
@@ -87,7 +87,7 @@ export default ({ data, state, partUserHandle, id, toId }) => {
 						<UserList>
 							{data.map((u) =>
 								u.participants.map((p) =>
-									p.id === state ? null : (
+									p.isMe === true ? null : (
 										<UserListT key={u.id}>
 											<UserButton onClick={() => partUserHandle(u.id, p)}>
 												<Avatar size="md" url={p.avatar} />
@@ -100,7 +100,7 @@ export default ({ data, state, partUserHandle, id, toId }) => {
 						</UserList>
 					</Body>
 				</ContainList>
-				<Message id={id} toId={toId} />
+				<Message roomId={roomId} toId={toId} />
 			</Contain>
 		</Wrapper>
 	);

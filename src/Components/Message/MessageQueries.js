@@ -35,6 +35,18 @@ export const SEND_MESSAGE = gql`
 		sendMessage(roomId: $roomId, message: $message, toId: $toId) {
 			id
 			text
+			from {
+				id
+				isMe
+				avatar
+				username
+			}
+			to {
+				id
+				isMe
+				avatar
+				username
+			}
 		}
 	}
 `;
@@ -44,12 +56,12 @@ export const NEW_MESSAGE = gql`
 		newMessage(roomId: $roomId) {
 			id
 			text
-			to {
+			from {
 				id
 				avatar
 				username
 			}
-			from {
+			to {
 				id
 				avatar
 				username
