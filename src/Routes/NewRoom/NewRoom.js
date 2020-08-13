@@ -1,13 +1,14 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { ME } from "../../SharedQueries";
 import Loading from "../../Components/Loading";
 import FatText from "../../Components/FatText";
 import Avatar from "../../Components/Avatart";
 import Button from "../../Components/Button";
-import { Circle } from "../../Components/Icons";
+import { Circle, FullCircle } from "../../Components/Icons";
+import { SEND_MESSAGE } from "../Message/MessageQueries";
 
 const Wrapper = styled.div`
 	position: absolute;
@@ -99,24 +100,27 @@ const UserInfo = styled.div`
 	align-items: center;
 `;
 
-const Check = styled.div``;
+const Check = styled.div`
+	svg {
+		fill: blue;
+	}
+`;
 
 export default withRouter(() => {
 	const { data, loading } = useQuery(ME);
+	const [newRoomMutation] = useMutation(SEND_MESSAGE);
 	const [toUser, setToUser] = useState([{ username: "", id: "", status: false }]);
 
 	const selectUser = ({ toId, username }) => {
 		setToUser((prev) => [...prev, { username, id: toId, status: !prev.status }]);
-
-		toUser.map((u) =>
-			u.status === true ? setToUser(toUser.filter((u) => u.id !== toId)) : null
-		);
 	};
 
 	const selectHandle = ({ toId }) => {
-		toUser.map((u) =>
-			u.status === true ? setToUser(toUser.filter((u) => u.id !== toId)) : null
-		);
+		setToUser(toUser.filter((u) => u.id !== toId));
+	};
+
+	const makeRoom = async () => {
+		toUser.map((u) => (u.id === "" ? null : console.log("room mutation", u.id)));
 	};
 
 	return (
@@ -126,7 +130,7 @@ export default withRouter(() => {
 					<Dummy />
 					<FatText text={"New Message"} />
 					<BtnContain>
-						<Button text="Next" />
+						<Button text="Next" onClick={makeRoom} />
 					</BtnContain>
 				</Header>
 				<SearchContain>
@@ -142,7 +146,7 @@ export default withRouter(() => {
 								</BtnContain>
 							)
 						)}
-						<Form onSubmit={null}>
+						<Form>
 							<Input type="text" placeholder="Search..." />
 						</Form>
 					</Div>
