@@ -154,7 +154,7 @@ export default ({
 		<Header>
 			<Avatar size="sm" url={avatar} />
 			<UserColumn>
-				<Link to={`/${username}`}>
+				<Link to={`/profile/${username}`}>
 					<FatText text={username} />
 				</Link>
 				<Location>{location}</Location>

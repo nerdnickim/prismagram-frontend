@@ -14,10 +14,11 @@ const LoggerInRoutes = () => (
 		<Route path="/explore" component={Explore} />
 		<Route path="/search" component={Search} />
 		<Route path="/message" component={Messages} />
-		<Route path="/:username" component={Profile} />
+		<Route path="/profile/:username" component={Profile} />
 		<Redirect from="*" to="/" />
 	</Switch>
 );
+
 const LoggedOutRoutes = () => (
 	<Switch>
 		<Route exact path="/" component={Auth} />

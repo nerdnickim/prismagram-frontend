@@ -233,7 +233,9 @@ export default withRouter(({ history }) => {
 						</HeaderLink>
 					) : (
 						<HeaderLink onClick={userHandle}>
-							<Link to={data.me.username}>{state.user ? <UserFull /> : <User />}</Link>
+							<Link to={`/profile/${data.me.username}`}>
+								{state.user ? <UserFull /> : <User />}
+							</Link>
 						</HeaderLink>
 					)}
 				</HeaderColumn>

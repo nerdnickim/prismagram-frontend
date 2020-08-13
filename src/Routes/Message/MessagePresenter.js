@@ -1,9 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "../Button";
-import FatText from "../FatText";
-import Loading from "../Loading";
-import Avatar from "../Avatart";
+import Button from "../../Components/Button";
+import FatText from "../../Components/FatText";
+import Loading from "../../Components/Loading";
+import Avatar from "../../Components/Avatart";
 import { Link } from "react-router-dom";
 import TextareaAutosize from "react-autosize-textarea/lib";
 
@@ -12,6 +12,8 @@ const Wrapper = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
+	width: 100%;
+	height: 100%;
 `;
 
 const Header = styled.header`
@@ -101,6 +103,7 @@ const MessagePresenter = ({
 	messages,
 	toId,
 	sendLoading,
+	refS,
 }) => {
 	return (
 		<Wrapper>
@@ -121,7 +124,7 @@ const MessagePresenter = ({
 						)}
 					</Header>
 					<Body>
-						<TextContain>
+						<TextContain ref={refS}>
 							{data?.messages?.map((m) => (
 								<Text key={m.id}>
 									{m.from.isMe === false ? (
@@ -169,15 +172,7 @@ const MessagePresenter = ({
 						</TextInputContain>
 					</Body>
 				</>
-			) : (
-				<>
-					<Body>
-						<ButtonContain>
-							<Button text={"Send Message"} />
-						</ButtonContain>
-					</Body>
-				</>
-			)}
+			) : null}
 		</Wrapper>
 	);
 };
