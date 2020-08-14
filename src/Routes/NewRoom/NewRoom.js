@@ -113,6 +113,13 @@ export default withRouter(() => {
 
 	const selectUser = ({ toId, username }) => {
 		setToUser((prev) => [...prev, { username, id: toId, status: !prev.status }]);
+		toUser.map((u) =>
+			u.status === true
+				? u.id === toId
+					? setToUser(toUser.filter((s) => s.id !== toId))
+					: null
+				: null
+		);
 	};
 
 	const selectHandle = ({ toId }) => {
