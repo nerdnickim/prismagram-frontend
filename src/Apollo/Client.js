@@ -26,7 +26,7 @@ const wsLink = new WebSocketLink({
 	uri:
 		process.env.NODE_ENV === "development"
 			? "ws://localhost:4000"
-			: "wss://cloneinggram-backend.herokuapp.com",
+			: "wss://cloninggram-db-df844e1cde.herokuapp.com/cloninggram/prod",
 	options: {
 		reconnect: true,
 	},
