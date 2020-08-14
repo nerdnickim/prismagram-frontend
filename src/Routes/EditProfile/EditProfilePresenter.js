@@ -52,7 +52,7 @@ const AvatarSelect = styled.div`
 	width: 35%;
 	justify-content: center;
 	display: flex;
-
+	cursor: pointer;
 	input[type="file"] {
 		display: none;
 	}

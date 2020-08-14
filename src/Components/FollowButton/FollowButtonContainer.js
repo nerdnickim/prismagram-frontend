@@ -4,7 +4,7 @@ import { useMutation } from "@apollo/client";
 import { FOLLOW, UNFOLLOW } from "./FollowButtonQueries";
 import FollowButtonPresenter from "./FollowButtonPresenter";
 
-const FollowButtonContainer = ({ isFollowing, id, data }) => {
+const FollowButtonContainer = ({ isFollowing, id }) => {
 	const [isFollowingS, setIsFollowing] = useState(isFollowing);
 	const [followMutation] = useMutation(FOLLOW, { variables: { id } });
 	const [unfollowMutation] = useMutation(UNFOLLOW, { variables: { id } });

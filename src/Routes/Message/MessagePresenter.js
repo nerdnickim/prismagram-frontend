@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import Button from "../../Components/Button";
 import FatText from "../../Components/FatText";
 import Loading from "../../Components/Loading";
 import Avatar from "../../Components/Avatart";
@@ -39,10 +38,6 @@ const Body = styled.div`
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-`;
-
-const ButtonContain = styled.div`
-	width: 30%;
 `;
 
 const TextContain = styled.ul`

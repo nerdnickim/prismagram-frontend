@@ -1,16 +1,17 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
-import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { ME } from "../../SharedQueries";
 import Loading from "../../Components/Loading";
 import FatText from "../../Components/FatText";
 import Avatar from "../../Components/Avatart";
 import Button from "../../Components/Button";
-import { Circle, FullCircle, CloseBtn } from "../../Components/Icons";
+import { Circle, CloseBtn } from "../../Components/Icons";
 import { SEND_MESSAGE } from "../Message/MessageQueries";
 import { SEARCH } from "../Search/SearchQueries";
 import useInput from "../../Hooks/useInput";
+import { SEE_ROOMS } from "../Messages/MessagesQueries";
 
 const Wrapper = styled.div`
 	position: absolute;
@@ -151,6 +152,7 @@ export default withRouter(({ history }) => {
 					data: { sendMessage },
 				} = await newRoomMutation({
 					variables: { toId: u.id, message: "" },
+					refetchQueries: [{ query: SEE_ROOMS }],
 				});
 				if (sendMessage) {
 					history.push({ pathname: `/message/${u.id}`, state: sendMessage?.room?.id });
