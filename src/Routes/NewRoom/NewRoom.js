@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { withRouter } from "react-router-dom";
-import { useQuery, useMutation } from "@apollo/client";
+import { useQuery, useMutation, useLazyQuery } from "@apollo/client";
 import { ME } from "../../SharedQueries";
 import Loading from "../../Components/Loading";
 import FatText from "../../Components/FatText";
@@ -9,6 +9,8 @@ import Avatar from "../../Components/Avatart";
 import Button from "../../Components/Button";
 import { Circle, FullCircle, CloseBtn } from "../../Components/Icons";
 import { SEND_MESSAGE } from "../Message/MessageQueries";
+import { SEARCH } from "../Search/SearchQueries";
+import useInput from "../../Hooks/useInput";
 
 const Wrapper = styled.div`
 	position: absolute;
@@ -115,6 +117,12 @@ const Check = styled.div`
 `;
 
 export default withRouter(({ history }) => {
+	const input = useInput("");
+
+	const { data: searchData, loading: loadingSearch } = useQuery(SEARCH, {
+		skip: input.value === "",
+		variables: { term: input.value },
+	});
 	const { data, loading } = useQuery(ME);
 	const [newRoomMutation, { loading: roomLoading }] = useMutation(SEND_MESSAGE);
 	const [toUser, setToUser] = useState([{ username: "", id: "", status: false }]);
@@ -151,6 +159,16 @@ export default withRouter(({ history }) => {
 		});
 	};
 
+	const findUserHandle = (e) => {
+		e.persist();
+		e.preventDefault();
+		if (searchData === undefined) {
+			return;
+		} else if (searchData.searchUser.length === 0) {
+			return;
+		}
+	};
+
 	const backHandle = (e) => {
 		history.push("/message");
 	};
@@ -182,8 +200,13 @@ export default withRouter(({ history }) => {
 									</BtnContain>
 								)
 							)}
-							<Form>
-								<Input type="text" placeholder="Search..." />
+							<Form onChange={findUserHandle}>
+								<Input
+									type="text"
+									value={input.value}
+									onChange={input.onChange}
+									placeholder="Search..."
+								/>
 							</Form>
 						</Div>
 					</SearchContain>
@@ -192,21 +215,37 @@ export default withRouter(({ history }) => {
 					) : (
 						<Body>
 							<UserList>
-								{data?.me?.following?.map((u) => (
-									<UserListT key={u.id}>
-										<UserButton
-											onClick={() => selectUser({ toId: u.id, username: u.username })}
-										>
-											<UserInfo>
-												<Avatar sime="sm" url={u.avatar} />
-												<Text text={u.username} />
-											</UserInfo>
-											<Check>
-												<Circle />
-											</Check>
-										</UserButton>
-									</UserListT>
-								))}
+								{searchData
+									? searchData.searchUser.map((u) => (
+											<UserListT key={u.id}>
+												<UserButton
+													onClick={() => selectUser({ toId: u.id, username: u.username })}
+												>
+													<UserInfo>
+														<Avatar sime="sm" url={u.avatar} />
+														<Text text={u.username} />
+													</UserInfo>
+													<Check>
+														<Circle />
+													</Check>
+												</UserButton>
+											</UserListT>
+									  ))
+									: data?.me?.following?.map((u) => (
+											<UserListT key={u.id}>
+												<UserButton
+													onClick={() => selectUser({ toId: u.id, username: u.username })}
+												>
+													<UserInfo>
+														<Avatar sime="sm" url={u.avatar} />
+														<Text text={u.username} />
+													</UserInfo>
+													<Check>
+														<Circle />
+													</Check>
+												</UserButton>
+											</UserListT>
+									  ))}
 							</UserList>
 						</Body>
 					)}
