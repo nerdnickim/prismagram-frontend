@@ -86,16 +86,13 @@ const NotificationBox = styled.div`
 	overflow-y: scroll;
 `;
 
-export default withRouter(({ history }) => {
+export default withRouter(({ history, location }) => {
 	const search = useInput("");
 	const { data, loading } = useQuery(ME);
 	let [state, setState] = useState({
 		notification: false,
-		home: true,
-		compass: false,
-		user: false,
-		message: false,
 	});
+
 	if (loading) return "";
 	const onSearchSubmit = (e) => {
 		e.preventDefault();
@@ -114,66 +111,6 @@ export default withRouter(({ history }) => {
 			setState((prev) => ({
 				...prev,
 				notification: false,
-			}));
-		}
-	};
-
-	const homeHandle = (e) => {
-		e.persist();
-		e.preventDefault();
-		if (state.home === false) {
-			setState((prev) => ({
-				...prev,
-				notification: false,
-				home: !state.home,
-				compass: false,
-				user: false,
-				message: false,
-			}));
-		}
-	};
-
-	const compoassHandle = (e) => {
-		e.persist();
-		e.preventDefault();
-		if (state.compass === false) {
-			setState((prev) => ({
-				...prev,
-				notification: false,
-				home: false,
-				compass: !state.compass,
-				user: false,
-				message: false,
-			}));
-		}
-	};
-
-	const userHandle = (e) => {
-		e.persist();
-		e.preventDefault();
-		if (state.user === false) {
-			setState((prev) => ({
-				...prev,
-				notification: false,
-				home: false,
-				compass: false,
-				user: !state.user,
-				message: false,
-			}));
-		}
-	};
-
-	const messageHandle = (e) => {
-		e.persist();
-		e.preventDefault();
-		if (state.user === false) {
-			setState((prev) => ({
-				...prev,
-				notification: false,
-				home: false,
-				compass: false,
-				user: false,
-				message: !state.message,
 			}));
 		}
 	};
@@ -197,15 +134,15 @@ export default withRouter(({ history }) => {
 					</form>
 				</HeaderColumn>
 				<HeaderColumn>
-					<HeaderLink onClick={homeHandle}>
-						<Link to="/">{state.home === true ? <HomeFull /> : <Home />}</Link>
+					<HeaderLink>
+						<Link to="/">{location.pathname === "/" ? <HomeFull /> : <Home />}</Link>
 					</HeaderLink>
-					<HeaderLink onClick={compoassHandle}>
+					<HeaderLink>
 						<Link to="/explore">
-							{state.compass === true ? <CompassFull /> : <Compass />}
+							{location.pathname === "/explore" ? <CompassFull /> : <Compass />}
 						</Link>
 					</HeaderLink>
-					<HeaderLink onClick={messageHandle}>
+					<HeaderLink>
 						<Link
 							to={{
 								pathname: "/message",
@@ -214,7 +151,7 @@ export default withRouter(({ history }) => {
 								},
 							}}
 						>
-							{state.message === true ? <MessageFullLogo /> : <MessageLogo />}
+							{location.pathname === "/message" ? <MessageFullLogo /> : <MessageLogo />}
 						</Link>
 					</HeaderLink>
 					<HeaderLink onClick={notificationHandle}>
@@ -232,9 +169,13 @@ export default withRouter(({ history }) => {
 							</Link>
 						</HeaderLink>
 					) : (
-						<HeaderLink onClick={userHandle}>
+						<HeaderLink>
 							<Link to={`/profile/${data.me.username}`}>
-								{state.user ? <UserFull /> : <User />}
+								{location.pathname === `/profile/${data.me.username}` ? (
+									<UserFull />
+								) : (
+									<User />
+								)}
 							</Link>
 						</HeaderLink>
 					)}

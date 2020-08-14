@@ -119,7 +119,7 @@ const Check = styled.div`
 export default withRouter(({ history }) => {
 	const input = useInput("");
 
-	const { data: searchData, loading: loadingSearch } = useQuery(SEARCH, {
+	const { data: searchData } = useQuery(SEARCH, {
 		skip: input.value === "",
 		variables: { term: input.value },
 	});
