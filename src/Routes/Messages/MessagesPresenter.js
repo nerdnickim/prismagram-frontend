@@ -30,7 +30,8 @@ const ContainList = styled.div`
 
 const Header = styled.header`
 	position: relative;
-	height: 12%;
+	max-height: 80px;
+	height: 100%;
 	border: ${(props) => props.theme.border};
 `;
 
@@ -73,7 +74,7 @@ const Text = styled(FatText)`
 	margin: 0 10px;
 `;
 
-const ButtonUser = styled.button``;
+const ButtonUser = styled(Link)``;
 
 const UserButton = styled(Link)`
 	display: flex;
@@ -95,7 +96,7 @@ export default ({ data, partUserHandle, roomId, toId, loadingBtn }) => {
 						<HeaderContain>
 							<Dummy />
 							<FatText text="Direct" />
-							<ButtonUser>
+							<ButtonUser to={"/message/newRoom"}>
 								<MessageUser />
 							</ButtonUser>
 						</HeaderContain>
@@ -128,7 +129,7 @@ export default ({ data, partUserHandle, roomId, toId, loadingBtn }) => {
 				<ButtonBody>
 					{loadingBtn ? null : (
 						<ButtonContain>
-							<Link to="/message/newRoom">
+							<Link to={{ pathname: "/message/newRoom" }}>
 								<Button text={"Send Message"} />
 							</Link>
 						</ButtonContain>

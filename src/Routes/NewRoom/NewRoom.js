@@ -7,7 +7,7 @@ import Loading from "../../Components/Loading";
 import FatText from "../../Components/FatText";
 import Avatar from "../../Components/Avatart";
 import Button from "../../Components/Button";
-import { Circle, FullCircle } from "../../Components/Icons";
+import { Circle, FullCircle, CloseBtn } from "../../Components/Icons";
 import { SEND_MESSAGE } from "../Message/MessageQueries";
 
 const Wrapper = styled.div`
@@ -20,13 +20,21 @@ const Wrapper = styled.div`
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	z-index: 10;
+	z-index: 9;
+`;
+
+const CloseContain = styled.button`
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	background-color: rgba(0, 0, 0, 0);
 `;
 
 const Container = styled.div`
 	width: 400px;
 	height: 385px;
 	${(props) => props.theme.whiteBox}
+	z-index:11
 `;
 
 const Header = styled.header`
@@ -106,9 +114,9 @@ const Check = styled.div`
 	}
 `;
 
-export default withRouter(() => {
+export default withRouter(({ history }) => {
 	const { data, loading } = useQuery(ME);
-	const [newRoomMutation] = useMutation(SEND_MESSAGE);
+	const [newRoomMutation, { loading: roomLoading }] = useMutation(SEND_MESSAGE);
 	const [toUser, setToUser] = useState([{ username: "", id: "", status: false }]);
 
 	const selectUser = ({ toId, username }) => {
@@ -126,62 +134,84 @@ export default withRouter(() => {
 		setToUser(toUser.filter((u) => u.id !== toId));
 	};
 
-	const makeRoom = async () => {
-		toUser.map((u) => (u.id === "" ? null : console.log("room mutation", u.id)));
+	const makeRoom = () => {
+		toUser.map(async (u) => {
+			if (u.id === "") {
+				return;
+			} else {
+				const {
+					data: { sendMessage },
+				} = await newRoomMutation({
+					variables: { toId: u.id, message: "" },
+				});
+				if (sendMessage) {
+					history.push({ pathname: `/message/${u.id}`, state: sendMessage?.room?.id });
+				}
+			}
+		});
+	};
+
+	const backHandle = (e) => {
+		history.push("/message");
 	};
 
 	return (
-		<Wrapper>
-			<Container>
-				<Header>
-					<Dummy />
-					<FatText text={"New Message"} />
-					<BtnContain>
-						<Button text="Next" onClick={makeRoom} />
-					</BtnContain>
-				</Header>
-				<SearchContain>
-					<Span>ToUser:</Span>
-					<Div>
-						{toUser.map((s) =>
-							s.username === "" ? null : (
-								<BtnContain key={s.id}>
-									<Button
-										text={s.username}
-										onClick={() => selectHandle({ toId: s.id })}
-									/>
-								</BtnContain>
-							)
-						)}
-						<Form>
-							<Input type="text" placeholder="Search..." />
-						</Form>
-					</Div>
-				</SearchContain>
-				{loading ? (
-					<Loading />
-				) : (
-					<Body>
-						<UserList>
-							{data?.me?.following?.map((u) => (
-								<UserListT key={u.id}>
-									<UserButton
-										onClick={() => selectUser({ toId: u.id, username: u.username })}
-									>
-										<UserInfo>
-											<Avatar sime="sm" url={u.avatar} />
-											<Text text={u.username} />
-										</UserInfo>
-										<Check>
-											<Circle />
-										</Check>
-									</UserButton>
-								</UserListT>
-							))}
-						</UserList>
-					</Body>
-				)}
-			</Container>
-		</Wrapper>
+		<>
+			<Wrapper>
+				<CloseContain onClick={backHandle}>
+					<CloseBtn />
+				</CloseContain>
+				<Container>
+					<Header>
+						<Dummy />
+						<FatText text={"New Message"} />
+						<BtnContain>
+							{roomLoading ? <Loading /> : <Button text="Next" onClick={makeRoom} />}
+						</BtnContain>
+					</Header>
+					<SearchContain>
+						<Span>ToUser:</Span>
+						<Div>
+							{toUser.map((s) =>
+								s.username === "" ? null : (
+									<BtnContain key={s.id}>
+										<Button
+											text={s.username}
+											onClick={() => selectHandle({ toId: s.id })}
+										/>
+									</BtnContain>
+								)
+							)}
+							<Form>
+								<Input type="text" placeholder="Search..." />
+							</Form>
+						</Div>
+					</SearchContain>
+					{loading ? (
+						<Loading />
+					) : (
+						<Body>
+							<UserList>
+								{data?.me?.following?.map((u) => (
+									<UserListT key={u.id}>
+										<UserButton
+											onClick={() => selectUser({ toId: u.id, username: u.username })}
+										>
+											<UserInfo>
+												<Avatar sime="sm" url={u.avatar} />
+												<Text text={u.username} />
+											</UserInfo>
+											<Check>
+												<Circle />
+											</Check>
+										</UserButton>
+									</UserListT>
+								))}
+							</UserList>
+						</Body>
+					)}
+				</Container>
+			</Wrapper>
+		</>
 	);
 });

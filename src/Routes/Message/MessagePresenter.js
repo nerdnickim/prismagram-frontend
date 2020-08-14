@@ -18,7 +18,8 @@ const Wrapper = styled.div`
 
 const Header = styled.header`
 	width: 100%;
-	height: 12%;
+	max-height: 80px;
+	height: 100%;
 	border: ${(props) => props.theme.border};
 	display: flex;
 	align-items: center;

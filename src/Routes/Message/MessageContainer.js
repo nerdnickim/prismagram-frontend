@@ -8,15 +8,23 @@ import { withRouter } from "react-router-dom";
 
 const MessageContainer = withRouter(
 	({ match: { params }, location: { state }, history }) => {
+		if (state?.roomId === undefined) {
+			history.push("/message");
+			console.log("ad");
+		}
 		const ref = useRef();
 		const [mArray, setMArray] = useState([]);
-		const { data, loading } = useQuery(SEE_ROOM, { variables: { id: state.roomId } });
+		const { data, loading } = useQuery(SEE_ROOM, { variables: { id: state?.roomId } });
 		const messageInput = useInput("");
 		const [sendMessageMutation, { loading: sendLoading }] = useMutation(SEND_MESSAGE, {
-			variables: { roomId: state.roomId, message: messageInput.value, toId: params.toId },
+			variables: {
+				roomId: state?.roomId,
+				message: messageInput.value,
+				toId: params.toId,
+			},
 		});
 		const { data: newData, loading: loadingNew, error } = useSubscription(NEW_MESSAGE, {
-			variables: { roomId: state.roomId },
+			variables: { roomId: state?.roomId },
 		});
 
 		const onKeyPress = async (e) => {
@@ -57,14 +65,7 @@ const MessageContainer = withRouter(
 
 		useEffect(() => {
 			messageHandle();
-
-			if (state.roomId) {
-				return;
-			} else {
-				history.push("/message");
-				console.log("ad");
-			}
-		}, [newData, state.roomId]);
+		}, [newData]);
 
 		return (
 			<MessagePresenter

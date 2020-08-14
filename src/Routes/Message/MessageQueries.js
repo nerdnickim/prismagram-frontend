@@ -47,6 +47,13 @@ export const SEND_MESSAGE = gql`
 				avatar
 				username
 			}
+			room {
+				id
+				participants {
+					id
+					username
+				}
+			}
 		}
 	}
 `;
