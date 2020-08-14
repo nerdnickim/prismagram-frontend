@@ -56,17 +56,11 @@ const EditProfileContainer = ({ avatar: avatarUrl, username }) => {
 				try {
 					const {
 						data: { location },
-					} = await axios.post(
-						process.env.NODE_ENV === "development"
-							? "http://localhost:4000/api/avatar"
-							: "https://cloneinggram-backend.herokuapp.com/api/avatar",
-						formData,
-						{
-							headers: {
-								"content-type": "multipart/form-data",
-							},
-						}
-					);
+					} = await axios.post("http://localhost:4000/api/avatar", formData, {
+						headers: {
+							"content-type": "multipart/form-data",
+						},
+					});
 
 					const {
 						data: { editUser },
