@@ -29,6 +29,7 @@ const wsLink = new WebSocketLink({
 			: "wss://cloneinggram-backend.herokuapp.com",
 	options: {
 		reconnect: true,
+		timeout: 3000,
 	},
 });
 
