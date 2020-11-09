@@ -12,6 +12,8 @@ const MessageContainer = withRouter(
 			history.push("/message");
 			console.log("ad");
 		}
+
+		const [state1, setState] = useState({ popUp: false });
 		const ref = useRef();
 		const [mArray, setMArray] = useState([]);
 		const { data, loading } = useQuery(SEE_ROOM, { variables: { id: state?.roomId } });
@@ -77,6 +79,8 @@ const MessageContainer = withRouter(
 				messages={mArray}
 				toId={params.toId}
 				refS={ref}
+				state1={state1}
+				setState={setState}
 			/>
 		);
 	}

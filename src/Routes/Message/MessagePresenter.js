@@ -5,6 +5,8 @@ import Loading from "../../Components/Loading";
 import Avatar from "../../Components/Avatart";
 import { Link } from "react-router-dom";
 import TextareaAutosize from "react-autosize-textarea/lib";
+import MessagePopUp from "../../Components/MessagePopUp";
+import useBlur from "../../Hooks/useBlur";
 
 const Wrapper = styled.div`
 	display: flex;
@@ -22,6 +24,7 @@ const Header = styled.header`
 	border: ${(props) => props.theme.border};
 	display: flex;
 	align-items: center;
+	justify-content: space-between;
 `;
 
 const HeaderContain = styled.div`
@@ -100,6 +103,8 @@ const MessagePresenter = ({
 	toId,
 	sendLoading,
 	refS,
+	state1,
+	setState,
 }) => {
 	return (
 		<Wrapper>
@@ -118,6 +123,19 @@ const MessagePresenter = ({
 								</Link>
 							)
 						)}
+						<div
+							style={{ position: "relative" }}
+							onBlur={(e) => useBlur.blurEvent(e, () => setState({ popUp: false }))}
+						>
+							<button
+								onClick={(e) => {
+									setState((p) => ({ ...p, popUp: !state1.popUp }));
+								}}
+							>
+								<i className="fas fa-ellipsis-h"></i>
+							</button>
+							{state1.popUp ? <MessagePopUp toId={toId} /> : null}
+						</div>
 					</Header>
 					<Body>
 						<TextContain ref={refS}>
